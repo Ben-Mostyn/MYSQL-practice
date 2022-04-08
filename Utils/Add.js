@@ -5,7 +5,7 @@ const Actor = require("../models/actor");
 const Genre = require("../models/genre");
 const Movie = require("../models/movie");
 
-// --add -- category --title --name
+// Start of add function
 const Add = async (argv) => {
   try {
     const foundGenre = await Genre.findOne({
@@ -16,6 +16,7 @@ const Add = async (argv) => {
         const genre = await Genre.create({ category: argv.category });
         const movie = await Movie.create({
           title: argv.title,
+          rating: argv.rating,
           GenreId: genre.id,
         });
         const actor = await movie.createActor({
@@ -29,6 +30,7 @@ const Add = async (argv) => {
     } else if (foundGenre) {
       const movie = await Movie.create({
         title: argv.title,
+        rating: argv.rating,
         GenreId: foundGenre.id,
       });
       const actor = await movie.createActor({

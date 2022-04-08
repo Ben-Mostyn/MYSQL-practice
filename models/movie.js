@@ -1,4 +1,4 @@
-const { DataTypes } = require("sequelize");
+const { DataTypes, INTEGER } = require("sequelize");
 const db = require("../connection");
 const Genre = require("./genre");
 const Actor = require("./actor");
@@ -9,10 +9,12 @@ const Movie = db.define(
     title: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
     },
+    rating: { type: INTEGER },
   },
   {
-    // indexes: [{unique: false, fields: ["title"]}]
+    indexes: [{ unique: false, fields: ["title"] }],
   }
 );
 
