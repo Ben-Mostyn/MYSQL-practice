@@ -1,13 +1,8 @@
 require("dotenv").config();
 require("./connection");
-
 const yargs = require("yargs");
 const { hideBin } = require("yargs/helpers");
 const argv = yargs(hideBin(process.argv)).argv;
-
-//Needed if I add users
-const bcrypt = require("bcrypt");
-const saltRounds = parseInt(process.env.SALT_ROUNDS);
 
 //Model imports
 const Genre = require("./models/genre");
@@ -20,7 +15,7 @@ const List = require("./Utils/List");
 const Remove = require("./Utils/Remove");
 const Update = require("./Utils/Update");
 
-// Basically our main() function
+//Main Function
 (async () => {
   await Genre.sync({ alter: true });
   await Movie.sync({ alter: true });

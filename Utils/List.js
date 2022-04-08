@@ -19,7 +19,7 @@ const List = async (argv) => {
         for (let i = 0; i < movies.length; i++) {
           for (let j = 0; j < actors.length; j++) {
             console.log(
-              `the movie is ${movies[i].title} the actor is ${actors[j].name}`
+              `the movie is ${movies[i].title}, the rating is ${movies[i].rating} the actor is ${actors[j].name}`
             );
           }
         }
@@ -41,8 +41,9 @@ const List = async (argv) => {
         const movies = await genre.getMovies();
         for (movie of movies) {
           const newMovie = JSON.stringify(movie, null, 2);
-          // console.log(`${genre.category} ${movie.title} ${newMovie}`);
-          console.log(` ${newMovie.title}`);
+          console.log(
+            ` The category is ${genre.category} and the film is ${movie.title}`
+          );
         }
       }
     }

@@ -6,18 +6,24 @@ const Genre = require("../models/genre");
 const Movie = require("../models/movie");
 
 const Update = async (argv) => {
-  if (argv.movie) {
-    const updated = await Movie.update(
-      { title: argv.updated },
-      {
-        where: {
-          title: argv.title,
-        },
+  try {
+    const updatedMovie = await Movie.findOne({
+      where: { [argv.key]: argv.title },
+    });
+    if (updatedMovie) {
+      if (argv.movie) {
+        const updated = await Movie.update(
+          { [argv.key]: argv.updated },
+          { where: { [argv.key]: argv.title } }
+        );
+        const title = argv.title;
+        const newTitle = argv.updated;
+        console.log(`You have changed ${title} to ${newTitle}`);
       }
-    );
-
-    console.log(updated);
-  }
+    } else if (!updatedMovie) {
+      console.log("movie not in the system");
+    }
+  } catch (error) {}
 };
 
 module.exports = Update;
