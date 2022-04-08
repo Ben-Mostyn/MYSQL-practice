@@ -1,30 +1,46 @@
 require("dotenv").config();
 require("./connection");
 
+const yargs = require("yargs");
+const { hideBin } = require("yargs/helpers");
+const argv = yargs(hideBin(process.argv)).argv;
+
+//Needed if I add users
+const bcrypt = require("bcrypt");
+const saltRounds = parseInt(process.env.SALT_ROUNDS);
+
+//Model imports
 const Genre = require("./models/genre");
 const Movie = require("./models/movie");
 const Actor = require("./models/actor");
 
+//Util Imports
+const Add = require("./Utils/Add");
+const List = require("./Utils/List");
+const Remove = require("./Utils/Remove");
+const Update = require("./Utils/Update");
+
 // Basically our main() function
 (async () => {
-    await Genre.sync({alter: true});
-    await Movie.sync({alter: true});
-    await Actor.sync({alter: true});
+  await Genre.sync({ alter: true });
+  await Movie.sync({ alter: true });
+  await Actor.sync({ alter: true });
 
-    const genre = await Genre.create({category: "Horror"});
-    const movie = await Movie.create({title: "Harry Potter", GenreId: genre.id});
-    // const actor = await Actor.create({name: "Mick", MovieId: movie.id});
-    const actor = await movie.createActor({
-        name: "Harry",
-        MovieId: movie.id
-    });
+  //!Add Feature
+  if (argv.add) {
+    await Add(argv);
+  }
+  //!List Feature
+  else if (argv.list) {
+    await List(argv);
+  }
+  //!Remove Feature
+  else if (argv.remove) {
+    await Remove(argv);
+  }
 
-    for (const genre of await Genre.findAll({include: Movie})) {
-	const movie = await genre.getMovie();
-	// const al2 = await Movie.findOne({include: Genre, where: {title: al1.title}});
-	// const genreName = await al2.getGenre();
-        const actor = await movie.getActor();
-	// console.log(`${actor.name} by ${genre.category} on ${al2.title}`);
-    console.log(actor, movie, genre);
-    }
+  //!Update Feature
+  else if (argv.update) {
+    await Update(argv);
+  }
 })();
